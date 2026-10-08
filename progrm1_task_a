@@ -1,1 +1,66 @@
+/*
+How the Single-Index Hack Works
 
+When you write mat[r][c], the compiler parses it from
+left to right as (mat[r])[c].mat[r] triggers your
+overloaded operator[](size_t row), which performs
+bounds checking on the row and returns a memory address
+(T*) pointing exactly to the first element of that row.
+The remaining [c] evaluates natively against that
+returned pointer using standard C++ pointer arithmetic
+(pointer + c), shifting right to the correct column.
+Note: While elegant, a downside to this raw-pointer
+method is that the secondary [c] step bypasses your
+class logic, meaning column-level bounds checking cannot
+be safely handled at runtime.
+*/
+
+#include "ArrayMatrix.h"
+//Name: Valerie Luna
+//Section: CS210-05, 11am
+//Date: 10/8/26
+
+int main() {
+    // TODO: Create matrices to demonstrate use of ALL
+    //       methods in ArrayMatrix class.
+    try {
+        //Creates 2x3 matrix, elemtents initialized to 1
+        ArrayMatrix<int> matrix1(2, 3, 1);
+        //Creates matrix1 copy
+        ArrayMatrix<int> matrix2(matrix1);
+        //Creates empty 2x3 matrix
+        ArrayMatrix<int> matrix3(2, 3);
+        
+        //Values from matrix1 copied to matrix3
+        matrix3 = matrix1;
+        //Value @ r 0, c 0 changed
+        matrix[0][0] = 5;
+        
+        //Displays matrix1
+        std::cout << "Matrix 1:\n" << matrix1 << "\n";
+        //Displays matrix2
+        std::cout << "Matrix 2:\n" << matrix2 << "\n";
+        //Displays matrix3
+        std::cout << "Matrix 3:\n" << matrix3 << "\n";
+
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << "\n";
+    }
+
+    // Use streams to init and output
+    // Create a 2x3 matrix for user input
+    ArrayMatrix<int> mat(2, 3);
+
+    // Prompt user input using standard stream extraction (cin)
+    std::cout << "Enter 6 integer values for a 2x3 matrix (separated by spaces or newlines):\n";
+    // TODO: cin statement
+    std::cin >> mat;
+
+    // Output the matrix formatting cleanly via custom insertion stream
+    std::cout << "\nYou entered the following matrix:\n";
+    
+    // TODO: cout statement
+    std::cout << mat;
+
+    return 0;
+}
